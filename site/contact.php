@@ -42,7 +42,6 @@ require __DIR__ . '/includes/header.php';
             <ul class="liste-services">
                 <li><strong>Vente pièces détachées</strong> d’origine coréenne</li>
                 <li><strong>Garage</strong> : entretien et réparation de véhicules coréens</li>
-                <li><strong>Clinic injector</strong> : diagnostic et test d’injecteurs</li>
             </ul>
             <div class="hero-actions">
                 <a class="btn btn-whatsapp" href="https://wa.me/<?= e(WHATSAPP) ?>" target="_blank" rel="noopener">WhatsApp</a>

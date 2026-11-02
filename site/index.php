@@ -8,7 +8,7 @@ $nbParCategorie = db()->query('SELECT categorie, COUNT(*) n FROM pieces WHERE ac
 $titre = SITE_NAME;
 $page = 'accueil';
 $canonical = url('');
-$description = 'Corée Auto, votre référence en pièces détachées d’origine coréenne à Madagascar : Hyundai, Kia, SsangYong, Daewoo. Promotions, nouveaux arrivages, garage et Clinic injector. Antananarivo et Tamatave.';
+$description = 'Corée Auto, votre référence en pièces détachées d’origine coréenne à Madagascar : Hyundai, Kia, SsangYong, Daewoo. Promotions, nouveaux arrivages, garage et atelier mécanique. Antananarivo et Tamatave.';
 require __DIR__ . '/includes/header.php';
 ?>
 
@@ -29,7 +29,6 @@ require __DIR__ . '/includes/header.php';
             <ul class="hero-services">
                 <li>Vente pièces détachées</li>
                 <li>Garage</li>
-                <li>Clinic injector</li>
             </ul>
         </div>
         <div class="hero-visuel">
@@ -95,8 +94,8 @@ require __DIR__ . '/includes/header.php';
     <div class="conteneur encart-atelier">
         <div>
             <p class="sur-titre-rouge">Notre atelier</p>
-            <h2>Garage et Clinic injector spécialisés véhicules coréens</h2>
-            <p>Diagnostic électronique, entretien, freinage, embrayage, suspension et test d’injecteurs diesel sur banc. Nos mécaniciens montent les pièces que vous achetez chez nous.</p>
+            <h2>Garage spécialisé véhicules coréens</h2>
+            <p>Diagnostic électronique, entretien, freinage, embrayage et suspension. Nos mécaniciens montent les pièces que vous achetez chez nous.</p>
             <a href="<?= url('atelier') ?>" class="btn btn-bleu">Découvrir l’atelier</a>
             <a href="<?= url('atelier#rendez-vous') ?>" class="btn btn-rouge">Prendre rendez-vous</a>
         </div>

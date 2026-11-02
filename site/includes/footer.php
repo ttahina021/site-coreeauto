@@ -5,7 +5,7 @@
         <div>
             <img src="<?= url('assets/img/logo-blanc.png') ?>" alt="Corée Auto" class="pied-logo">
             <p>Votre référence en pièces détachées coréennes à Madagascar.</p>
-            <p class="pied-services">Vente pièces détachées · Garage · Clinic injector</p>
+            <p class="pied-services">Vente pièces détachées · Garage</p>
         </div>
         <div>
             <h3>Nos magasins</h3>

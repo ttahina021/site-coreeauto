@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$titre = 'Atelier, garage et Clinic injector pour véhicules coréens';
+$titre = 'Atelier et garage pour véhicules coréens';
 $page = 'atelier';
 $canonical = url('atelier');
-$description = 'Atelier Corée Auto : diagnostic électronique, Clinic injector (test d’injecteurs diesel), entretien, freinage, embrayage et suspension pour Hyundai, Kia, SsangYong. Prenez rendez-vous en ligne.';
+$description = 'Atelier Corée Auto : diagnostic électronique, entretien, freinage, embrayage et suspension pour Hyundai, Kia, SsangYong. Prenez rendez-vous en ligne.';
 if (!empty($_GET['envoye'])) {
     $robots = 'noindex';
 }
@@ -37,7 +37,7 @@ require __DIR__ . '/includes/header.php';
 
 <section class="page-titre page-titre-atelier">
     <div class="conteneur">
-        <p class="hero-sur-titre">Garage · Clinic injector</p>
+        <p class="hero-sur-titre">Garage · Diagnostic · Entretien</p>
         <h1>L’atelier Corée Auto</h1>
         <p>Des mécaniciens spécialisés Hyundai, Kia, SsangYong et Daewoo, avec les bonnes pièces sur place.</p>
         <div class="hero-actions">

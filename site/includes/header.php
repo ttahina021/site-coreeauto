@@ -10,7 +10,7 @@ $titre = $titre ?? SITE_NAME;
 $page = $page ?? '';
 $q = $_GET['q'] ?? '';
 $titreComplet = $titre === SITE_NAME ? SITE_NAME . ' | Pièces détachées coréennes à Madagascar' : $titre . ' | ' . SITE_NAME;
-$description = $description ?? 'Corée Auto : pièces détachées d’origine coréenne pour Hyundai, Kia, SsangYong, Daewoo. Garage et Clinic injector. Magasins à Antananarivo et Tamatave.';
+$description = $description ?? 'Corée Auto : pièces détachées d’origine coréenne pour Hyundai, Kia, SsangYong, Daewoo. Garage et atelier mécanique. Magasins à Antananarivo et Tamatave.';
 $description = mb_strimwidth(trim(preg_replace('/\s+/', ' ', $description)), 0, 160, '…');
 $canonicalAbs = isset($canonical) ? url_absolue($canonical) : null;
 $ogImageAbs = url_absolue($ogImage ?? url('assets/img/couverture.jpg'));

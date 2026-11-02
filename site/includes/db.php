@@ -206,7 +206,7 @@ function seed_demo(PDO $pdo): void
         ['KIA-41100-3E000', 'Kit d’embrayage', 'Disque, mécanisme et butée d’embrayage.', 'Kia', 'Sorento, Carnival', 'Embrayage', 890000, 3, 'pourcent', 12, 1],
         ['SY-66510-08000', 'Bougies d’allumage (x4)', 'Lot de 4 bougies d’allumage iridium.', 'SsangYong', 'Korando, Tivoli', 'Électricité', 72000, 25, null, null, 0],
         ['DW-96591-450', 'Roulement de roue', 'Roulement de roue avant à aiguilles.', 'Daewoo', 'Matiz, Lanos', 'Transmission', 68000, 15, null, null, 1],
-        ['HY-33800-4A000', 'Injecteur diesel', 'Injecteur common rail, testé à la Clinic injector.', 'Hyundai', 'H1, Terracan', 'Injection', 750000, 2, null, null, 0],
+        ['HY-33800-4A000', 'Injecteur diesel', 'Injecteur common rail, testé sur banc.', 'Hyundai', 'H1, Terracan', 'Injection', 750000, 2, null, null, 0],
         ['KIA-25310-3E100', 'Radiateur moteur', 'Radiateur de refroidissement en aluminium.', 'Kia', 'Sorento', 'Refroidissement', 540000, 3, null, null, 0],
     ];
     $stmt = $pdo->prepare('INSERT INTO pieces

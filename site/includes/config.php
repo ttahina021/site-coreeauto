@@ -14,7 +14,7 @@ const WHATSAPP = '261335177778';
 // 'carte' : texte recherché sur Google Maps (adresse, ou coordonnées GPS « -18.89,47.52 »)
 const MAGASINS = [
     ['nom' => 'Ankasina 67ha', 'tel' => '033 51 777 78', 'adresse' => 'Rue Boulevard de l’Europe, 67 Ha, Antananarivo',
-        'carte' => '-18.89686,47.51123'],
+        'carte' => '-18.8968576,47.5112374'],
     ['nom' => 'Anosizato Est', 'tel' => '033 60 777 77', 'adresse' => 'Anosizato Est, Antananarivo',
         'carte' => 'Anosizato Est, Antananarivo'],
     ['nom' => 'Tamatave (Bazar be)', 'tel' => '033 72 606 72', 'adresse' => 'Bazar be, Toamasina',
@@ -30,7 +30,6 @@ const HORAIRES = [
 // Prestations de l'atelier (page Atelier et formulaire de rendez-vous)
 const SERVICES_ATELIER = [
     ['titre' => 'Diagnostic électronique', 'texte' => 'Lecture des codes défaut à la valise, recherche de panne moteur, ABS, airbag, boîte automatique.'],
-    ['titre' => 'Clinic injector', 'texte' => 'Test, nettoyage et calibrage des injecteurs diesel common rail sur banc. Rapport de débit fourni.'],
     ['titre' => 'Entretien & vidange', 'texte' => 'Vidange moteur, filtres, bougies, courroie de distribution, contrôle des niveaux.'],
     ['titre' => 'Freinage', 'texte' => 'Plaquettes, disques, mâchoires, maître-cylindre, purge du circuit de freinage.'],
     ['titre' => 'Embrayage & transmission', 'texte' => 'Remplacement du kit d’embrayage, cardans, roulements, soufflets.'],
