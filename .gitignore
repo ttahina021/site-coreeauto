@@ -1,0 +1,26 @@
+# --- Secrets : jamais dans le dépôt ---
+site/includes/db-config.php
+
+# --- Données locales et contenus du serveur ---
+site/data/*
+!site/data/.htaccess
+!site/data/.gitkeep
+site/uploads/*
+!site/uploads/.htaccess
+!site/uploads/.gitkeep
+
+# Notes internes (contiennent le mot de passe admin par défaut)
+site/LISEZMOI.md
+
+# Images sources à la racine du dossier de travail (déjà copiées dans site/assets/img)
+/*.jpg
+/*.jpeg
+/*.png
+
+# Divers
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log
