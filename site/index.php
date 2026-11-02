@@ -32,7 +32,7 @@ require __DIR__ . '/includes/header.php';
             </ul>
         </div>
         <div class="hero-visuel">
-            <img src="<?= url('assets/img/arrivage.jpg') ?>" alt="Arrivage pièces dans tous nos magasins">
+            <img src="<?= url('assets/img/logo-ca.png') ?>" class="hero-logo" width="1000" height="658" alt="Logo Corée Auto">
         </div>
     </div>
 </section>

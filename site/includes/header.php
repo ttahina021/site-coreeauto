@@ -68,8 +68,9 @@ $ldBase = [
     <?php if ($canonicalAbs): ?><meta property="og:url" content="<?= e($canonicalAbs) ?>"><?php endif; ?>
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" href="<?= url('assets/img/favicon.png') ?>">
-    <link rel="apple-touch-icon" href="<?= url('assets/img/favicon.png') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= url('assets/img/favicon-32.png') ?>">
+    <link rel="icon" type="image/png" sizes="64x64" href="<?= url('assets/img/favicon.png') ?>">
+    <link rel="apple-touch-icon" href="<?= url('assets/img/apple-touch-icon.png') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">

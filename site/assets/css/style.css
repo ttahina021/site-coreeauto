@@ -114,6 +114,7 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
 .hero-services { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; font-weight: 600; }
 .hero-services li::before { content: '●'; color: #fff; margin-right: 8px; font-size: 10px; vertical-align: middle; }
 .hero-visuel img { border-radius: 18px; box-shadow: 0 24px 50px rgba(0,0,0,.35); transform: rotate(2deg); border: 5px solid #fff; }
+.hero-visuel img.hero-logo { background: #fff; padding: 9% 7%; width: 100%; height: auto; transform: none; }
 
 /* ---------- Marques ---------- */
 .marques { background: #fff; border-bottom: 1px solid var(--bordure); }
