@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="page-connexion">
     <form method="post" class="boite-connexion formulaire">
-        <img src="<?= url('assets/img/logo-header.png') ?>" alt="Corée Auto">
+        <img src="<?= url('assets/img/logo-ca-admin.png') ?>" alt="Corée Auto" class="logo-ca-connexion" width="320" height="211">
         <h1>Espace administrateur</h1>
         <?php if ($erreur): ?><div class="alerte alerte-erreur"><?= e($erreur) ?></div><?php endif; ?>
         <?= csrf_field() ?>

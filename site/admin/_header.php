@@ -29,7 +29,7 @@ $liens['compte'] = ['compte.php', 'Mon compte'];
 </head>
 <body class="admin">
 <aside class="admin-menu">
-    <a href="<?= url('admin/index.php') ?>" class="admin-logo"><img src="<?= url('assets/img/logo-blanc.png') ?>" alt="Corée Auto"></a>
+    <a href="<?= url('admin/index.php') ?>" class="admin-logo"><span class="admin-logo-ca"><img src="<?= url('assets/img/logo-ca-admin.png') ?>" alt="Corée Auto" width="320" height="211"></span></a>
     <nav>
         <?php foreach ($liens as $cle => [$href, $label]): ?>
             <a href="<?= url('admin/' . $href) ?>" class="<?= $page === $cle ? 'actif' : '' ?>">
