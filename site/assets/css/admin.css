@@ -2,7 +2,7 @@
 body.admin { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; background: var(--fond-gris); }
 
 .admin-menu { background: var(--bleu-fonce); color: #fff; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
-.admin-logo { display: block; padding: 22px 20px; background: var(--degrade); }
+.admin-logo { display: block; padding: 22px 20px; background: var(--degrade); text-align: center; }
 .admin-logo-ca { display: inline-block; background: #fff; border-radius: 12px; padding: 8px 14px; box-shadow: 0 6px 16px rgba(0,0,0,.2); }
 .admin-logo img { height: 52px; width: auto; display: block; }
 .admin-menu nav { display: flex; flex-direction: column; padding: 14px 0; }
@@ -100,8 +100,8 @@ body.admin { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh;
     .stats { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 860px) {
-    body.admin { grid-template-columns: 1fr; }
-    .admin-menu { position: static; height: auto; }
+    body.admin { grid-template-columns: minmax(0, 1fr); }
+    .admin-menu { position: static; height: auto; min-width: 0; }
     .admin-menu nav { flex-direction: row; overflow-x: auto; padding: 0; }
     .admin-menu nav a { border-left: 0; border-bottom: 3px solid transparent; white-space: nowrap; }
     .admin-menu nav a.actif { border-bottom-color: var(--rouge); }
