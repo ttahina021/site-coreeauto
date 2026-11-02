@@ -18,7 +18,7 @@ const MAGASINS = [
     ['nom' => 'Anosizato Est', 'tel' => '033 60 777 77', 'adresse' => 'Anosizato Est, Antananarivo',
         'carte' => 'Anosizato Est, Antananarivo'],
     ['nom' => 'Tamatave (Bazar be)', 'tel' => '033 72 606 72', 'adresse' => 'Bazar be, Toamasina',
-        'carte' => 'Bazar be, Toamasina'],
+        'carte' => '-18.1571227,49.4103809'],
 ];
 
 const HORAIRES = [
