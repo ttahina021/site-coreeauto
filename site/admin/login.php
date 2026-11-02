@@ -15,10 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = db()->prepare('SELECT * FROM admins WHERE identifiant = ?');
     $stmt->execute([trim($_POST['identifiant'] ?? '')]);
     $admin = $stmt->fetch();
-    if ($admin && password_verify($_POST['mot_de_passe'] ?? '', $admin['mot_de_passe'])) {
+    if ($admin && (int) $admin['actif'] === 1 && password_verify($_POST['mot_de_passe'] ?? '', $admin['mot_de_passe'])) {
         session_regenerate_id(true);
         $_SESSION['admin_id'] = (int) $admin['id'];
-        $_SESSION['admin_nom'] = $admin['identifiant'];
+        $_SESSION['admin_nom'] = $admin['nom'] ?: $admin['identifiant'];
         unset($_SESSION['tentatives']);
         if (password_verify('coreeauto2026', $admin['mot_de_passe'])) {
             flash('Vous utilisez le mot de passe par défaut. Changez-le dans « Mon compte ».', 'erreur');

@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/../includes/bootstrap.php';
-exiger_admin();
+exiger_admin('pieces');
 
 $id = (int) ($_GET['id'] ?? 0);
 $piece = $id ? get_piece($id, false) : null;
@@ -26,6 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $f['prix'] = (int) preg_replace('/\D/', '', (string) ($_POST['prix'] ?? ''));
     $f['stock'] = max(0, (int) ($_POST['stock'] ?? 0));
     $f['promo_valeur'] = (int) preg_replace('/\D/', '', (string) ($_POST['promo_valeur'] ?? ''));
+    if (!peut('promotions')) {
+        // sans l'autorisation Promotions, la promotion existante est conservée telle quelle
+        foreach (['promo_type', 'promo_valeur', 'promo_debut', 'promo_fin'] as $k) {
+            $f[$k] = $piece[$k] ?? '';
+        }
+        $f['promo_type'] = (string) $f['promo_type'];
+    }
     $f['nouveau'] = isset($_POST['nouveau']) ? 1 : 0;
     $f['actif'] = isset($_POST['actif']) ? 1 : 0;
 
@@ -140,6 +147,7 @@ require __DIR__ . '/_header.php';
                 <?php endif; ?>
             </section>
 
+            <?php if (peut('promotions')): ?>
             <section class="panneau panneau-promo">
                 <h2>Promotion</h2>
                 <label>Type de promotion
@@ -158,6 +166,12 @@ require __DIR__ . '/_header.php';
                     <p class="petit">Laissez les dates vides pour une promotion sans limite.</p>
                 </div>
             </section>
+            <?php elseif ($f['promo_type']): ?>
+            <section class="panneau panneau-promo">
+                <h2>Promotion</h2>
+                <p class="petit">Cette pièce est en promotion. Seul un compte avec l’accès « Promotions » peut la modifier.</p>
+            </section>
+            <?php endif; ?>
         </div>
     </div>
 

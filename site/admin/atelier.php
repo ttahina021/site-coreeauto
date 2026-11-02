@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/../includes/bootstrap.php';
-exiger_admin();
+exiger_admin('atelier');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();

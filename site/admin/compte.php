@@ -2,7 +2,7 @@
 require __DIR__ . '/../includes/bootstrap.php';
 exiger_admin();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'test_mail') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'test_mail' && est_super_admin()) {
     csrf_check();
     $ok = envoyer_mail(mail_boutique(), 'Test d’envoi - ' . SITE_NAME,
         "Ceci est un e-mail de test envoyé depuis l’administration du site, le " . date('d/m/Y à H:i') . ".\n\nSi vous le lisez, les notifications de commandes et de rendez-vous fonctionnent.", null, $erreurMail);
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'test_
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     $stmt = db()->prepare('SELECT * FROM admins WHERE id = ?');
-    $stmt->execute([$_SESSION['admin_id']]);
+    $stmt->execute([admin_courant()['id']]);
     $admin = $stmt->fetch();
     $nouveau = $_POST['nouveau'] ?? '';
     if (!$admin || !password_verify($_POST['actuel'] ?? '', $admin['mot_de_passe'])) {
@@ -46,6 +46,7 @@ require __DIR__ . '/_header.php';
     </form>
 </section>
 
+<?php if (est_super_admin()): ?>
 <section class="panneau panneau-etroit">
     <h2>E-mails du site</h2>
     <?php if (mail_configure()): ?>
@@ -59,5 +60,6 @@ require __DIR__ . '/_header.php';
         <p class="petit">L’envoi d’e-mails n’est pas encore configuré sur ce serveur (fichier includes/mail-config.php absent).</p>
     <?php endif; ?>
 </section>
+<?php endif; ?>
 
 <?php require __DIR__ . '/_footer.php'; ?>

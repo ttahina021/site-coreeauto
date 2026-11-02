@@ -3,18 +3,28 @@ require __DIR__ . '/../includes/bootstrap.php';
 exiger_admin();
 
 $pdo = db();
-$stats = [
-    'Pièces en ligne' => (int) $pdo->query('SELECT COUNT(*) FROM pieces WHERE actif = 1')->fetchColumn(),
-    'Promotions actives' => (int) $pdo->query('SELECT COUNT(*) FROM pieces WHERE actif = 1 AND ' . promo_active_sql())->fetchColumn(),
-    'Nouvelles commandes' => (int) $pdo->query("SELECT COUNT(*) FROM commandes WHERE statut = 'nouvelle'")->fetchColumn(),
-    'Pièces en rupture' => (int) $pdo->query('SELECT COUNT(*) FROM pieces WHERE actif = 1 AND stock <= 0')->fetchColumn(),
-];
-$commandes = $pdo->query('SELECT * FROM commandes ORDER BY id DESC LIMIT 6')->fetchAll();
-$stockBas = $pdo->query('SELECT * FROM pieces WHERE actif = 1 AND stock <= 3 ORDER BY stock ASC LIMIT 6')->fetchAll();
+$stats = [];
+if (peut('pieces')) {
+    $stats['Pièces en ligne'] = (int) $pdo->query('SELECT COUNT(*) FROM pieces WHERE actif = 1')->fetchColumn();
+}
+if (peut('promotions')) {
+    $stats['Promotions actives'] = (int) $pdo->query('SELECT COUNT(*) FROM pieces WHERE actif = 1 AND ' . promo_active_sql())->fetchColumn();
+}
+if (peut('commandes')) {
+    $stats['Nouvelles commandes'] = (int) $pdo->query("SELECT COUNT(*) FROM commandes WHERE statut = 'nouvelle'")->fetchColumn();
+}
+if (peut('atelier')) {
+    $stats['Rendez-vous à traiter'] = (int) $pdo->query("SELECT COUNT(*) FROM rendez_vous WHERE statut = 'nouveau'")->fetchColumn();
+}
+if (peut('pieces')) {
+    $stats['Pièces en rupture'] = (int) $pdo->query('SELECT COUNT(*) FROM pieces WHERE actif = 1 AND stock <= 0')->fetchColumn();
+}
+$commandes = peut('commandes') ? $pdo->query('SELECT * FROM commandes ORDER BY id DESC LIMIT 6')->fetchAll() : null;
+$stockBas = peut('pieces') ? $pdo->query('SELECT * FROM pieces WHERE actif = 1 AND stock <= 3 ORDER BY stock ASC LIMIT 6')->fetchAll() : null;
 
 $titre = 'Tableau de bord';
 $page = 'tableau';
-$actionEntete = '<a href="' . url('admin/piece.php') . '" class="btn btn-rouge">+ Ajouter une pièce</a>';
+$actionEntete = peut('pieces') ? '<a href="' . url('admin/piece.php') . '" class="btn btn-rouge">+ Ajouter une pièce</a>' : '';
 require __DIR__ . '/_header.php';
 ?>
 
@@ -24,7 +34,12 @@ require __DIR__ . '/_header.php';
     <?php endforeach; ?>
 </div>
 
+<?php if (!$stats): ?>
+    <section class="panneau"><p>Votre compte n’a encore aucun accès. Demandez à l’administrateur de vous en attribuer.</p></section>
+<?php endif; ?>
+
 <div class="admin-2col">
+    <?php if ($commandes !== null): ?>
     <section class="panneau">
         <h2>Dernières commandes <a href="<?= url('admin/commandes.php') ?>">Tout voir</a></h2>
         <?php if (!$commandes): ?>
@@ -45,7 +60,9 @@ require __DIR__ . '/_header.php';
             </table>
         <?php endif; ?>
     </section>
+    <?php endif; ?>
 
+    <?php if ($stockBas !== null): ?>
     <section class="panneau">
         <h2>Stock faible <a href="<?= url('admin/pieces.php') ?>">Gérer les pièces</a></h2>
         <?php if (!$stockBas): ?>
@@ -64,6 +81,7 @@ require __DIR__ . '/_header.php';
             </table>
         <?php endif; ?>
     </section>
+    <?php endif; ?>
 </div>
 
 <?php require __DIR__ . '/_footer.php'; ?>

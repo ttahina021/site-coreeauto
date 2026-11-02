@@ -145,6 +145,8 @@ jobs:
           verifier /catalogue               "200"
           verifier /sitemap.xml             "200"
           verifier /robots.txt              "200"
+          verifier /admin/login.php         "200"
+          verifier /admin/                  "302"
           verifier /index.php               "301"
           verifier /includes/db-config.php  "403 404"
           verifier /includes/mail-config.php "403 404"

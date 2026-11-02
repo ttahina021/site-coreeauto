@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/../includes/bootstrap.php';
-exiger_admin();
+exiger_admin('promotions');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($action === 'visibilite') {
+    if ($action === 'visibilite' && est_super_admin()) {
         $mode = $_POST['page_promotions'] ?? 'auto';
         if (isset(MODES_PAGE_PROMOS[$mode])) {
             enregistrer_reglage('page_promotions', $mode);
@@ -67,6 +67,7 @@ $page = 'promotions';
 require __DIR__ . '/_header.php';
 ?>
 
+<?php if (est_super_admin()): ?>
 <?php $modePromos = reglage('page_promotions', 'auto'); ?>
 <section class="panneau">
     <h2>Page Promotions sur le site</h2>
@@ -84,6 +85,7 @@ require __DIR__ . '/_header.php';
         <button type="submit" class="btn btn-bleu">Enregistrer</button>
     </form>
 </section>
+<?php endif; ?>
 
 <section class="panneau panneau-promo">
     <h2>Appliquer une promotion à plusieurs pièces</h2>

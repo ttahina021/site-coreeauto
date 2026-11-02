@@ -177,15 +177,74 @@ function panier_detail(): array
 
 // ---------- Administration ----------
 
-function admin_connecte(): bool
+/** Autorisations qu'on peut donner à un compte employé. */
+const PERMISSIONS_ADMIN = [
+    'pieces' => 'Saisie des pièces',
+    'commandes' => 'Commandes',
+    'atelier' => 'Rendez-vous atelier',
+    'promotions' => 'Promotions',
+];
+
+const ROLES_ADMIN = [
+    'employe' => 'Employé',
+    'super' => 'Administrateur principal',
+];
+
+/** Compte connecté, relu à chaque page : un compte désactivé est déconnecté aussitôt. */
+function admin_courant(): ?array
 {
-    return !empty($_SESSION['admin_id']);
+    static $admin = false;
+    if ($admin === false) {
+        $admin = null;
+        if (!empty($_SESSION['admin_id'])) {
+            $stmt = db()->prepare('SELECT * FROM admins WHERE id = ? AND actif = 1');
+            $stmt->execute([$_SESSION['admin_id']]);
+            $admin = $stmt->fetch() ?: null;
+            if (!$admin) {
+                unset($_SESSION['admin_id'], $_SESSION['admin_nom']);
+            }
+        }
+    }
+    return $admin;
 }
 
-function exiger_admin(): void
+function admin_connecte(): bool
+{
+    return admin_courant() !== null;
+}
+
+function est_super_admin(): bool
+{
+    return (admin_courant()['role'] ?? '') === 'super';
+}
+
+/** Autorisations d'un compte (toutes pour l'administrateur principal). */
+function permissions_admin(?array $admin): array
+{
+    if (!$admin) {
+        return [];
+    }
+    if ($admin['role'] === 'super') {
+        return array_keys(PERMISSIONS_ADMIN);
+    }
+    return array_values(array_intersect(array_keys(PERMISSIONS_ADMIN), explode(',', (string) $admin['permissions'])));
+}
+
+function peut(string $permission): bool
+{
+    return in_array($permission, permissions_admin(admin_courant()), true);
+}
+
+/** Exige une connexion, et éventuellement une autorisation ('super' = administrateur principal). */
+function exiger_admin(?string $permission = null): void
 {
     if (!admin_connecte()) {
         redirect('admin/login.php');
+    }
+    $autorise = $permission === null || ($permission === 'super' ? est_super_admin() : peut($permission));
+    if (!$autorise) {
+        flash('Votre compte n’a pas accès à cette page.', 'erreur');
+        redirect('admin/index.php');
     }
 }
 

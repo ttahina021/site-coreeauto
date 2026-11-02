@@ -1,12 +1,12 @@
 <?php
 require __DIR__ . '/../includes/bootstrap.php';
-exiger_admin();
+exiger_admin('pieces');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     $id = (int) ($_POST['id'] ?? 0);
     $action = $_POST['action'] ?? '';
-    if ($action === 'supprimer' && ($p = get_piece($id, false))) {
+    if ($action === 'supprimer' && est_super_admin() && ($p = get_piece($id, false))) {
         db()->prepare('DELETE FROM pieces WHERE id = ?')->execute([$id]);
         supprimer_image($p['image']);
         flash('Pièce « ' . $p['nom'] . ' » supprimée.');
@@ -93,7 +93,9 @@ require __DIR__ . '/_header.php';
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= $p['id'] ?>">
                         <button name="action" value="basculer" class="btn-mini"><?= $p['actif'] ? 'Masquer' : 'Publier' ?></button>
+                        <?php if (est_super_admin()): ?>
                         <button name="action" value="supprimer" class="btn-mini btn-mini-rouge" data-confirmer="Supprimer définitivement cette pièce ?">Supprimer</button>
+                        <?php endif; ?>
                     </form>
                 </td>
             </tr>

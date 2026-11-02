@@ -41,6 +41,7 @@ function installer_si_besoin(PDO $pdo): void
 {
     try {
         $pdo->query('SELECT 1 FROM rendez_vous LIMIT 1');
+        migrer_admins($pdo);
         return; // la dernière table ajoutée existe : tout est en place
     } catch (PDOException $e) {
         // tables absentes : on les crée ci-dessous
@@ -56,6 +57,35 @@ function installer_si_besoin(PDO $pdo): void
             seed_demo($pdo); // pièces fictives uniquement pour les tests locaux
         }
     }
+    migrer_admins($pdo);
+}
+
+/**
+ * Ajoute aux comptes d'administration le nom, le rôle, les autorisations et l'état actif/désactivé.
+ * Les comptes existant avant cette mise à jour deviennent administrateurs principaux.
+ */
+function migrer_admins(PDO $pdo): void
+{
+    try {
+        $pdo->query('SELECT role FROM admins LIMIT 1');
+        return;
+    } catch (PDOException $e) {
+        // colonnes absentes : on les ajoute
+    }
+    $colonnes = [
+        "nom VARCHAR(100) NOT NULL DEFAULT ''",
+        "permissions VARCHAR(255) NOT NULL DEFAULT ''",
+        'actif INTEGER NOT NULL DEFAULT 1',
+        "role VARCHAR(20) NOT NULL DEFAULT 'employe'", // en dernier : sa présence signale une migration terminée
+    ];
+    foreach ($colonnes as $colonne) {
+        try {
+            $pdo->exec('ALTER TABLE admins ADD COLUMN ' . $colonne);
+        } catch (PDOException $e) {
+            // colonne déjà ajoutée lors d'une tentative précédente
+        }
+    }
+    $pdo->exec("UPDATE admins SET role = 'super'");
 }
 
 function schema_mysql(): array
