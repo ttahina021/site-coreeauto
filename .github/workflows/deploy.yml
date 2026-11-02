@@ -24,7 +24,7 @@ jobs:
     name: Vérifier le code PHP
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -66,7 +66,7 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Envoi incrémental : seuls les fichiers modifiés depuis le dernier déploiement partent.
       # Les fichiers qui ne viennent pas du dépôt (db-config.php, photos dans uploads/,
