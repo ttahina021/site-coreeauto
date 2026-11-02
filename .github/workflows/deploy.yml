@@ -41,10 +41,12 @@ jobs:
 
       - name: Aucun secret dans le dépôt
         run: |
-          if [ -e site/includes/db-config.php ]; then
-            echo "::error::site/includes/db-config.php ne doit jamais être dans le dépôt."
-            exit 1
-          fi
+          for f in site/includes/db-config.php site/includes/mail-config.php; do
+            if [ -e "$f" ]; then
+              echo "::error::$f ne doit jamais être dans le dépôt."
+              exit 1
+            fi
+          done
 
   deployer:
     name: Envoyer sur coreeauto.mg
@@ -83,6 +85,7 @@ jobs:
             **/.git*
             **/.git*/**
             includes/db-config.php
+            includes/mail-config.php
             data/*.sqlite*
             uploads/*.jpg
             uploads/*.jpeg
@@ -90,6 +93,44 @@ jobs:
             uploads/*.webp
             uploads/*.gif
             LISEZMOI.md
+
+      # mail-config.php (identifiants SMTP) est écrit à partir du secret SMTP_PASSWORD
+      # et envoyé à part : il n'est jamais dans le dépôt ni suivi par la synchronisation,
+      # donc jamais supprimé par un déploiement.
+      - name: Configuration e-mail (mail-config.php)
+        env:
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_DIR: ${{ vars.FTP_SERVER_DIR || 'public_html/' }}
+        run: |
+          if [ -z "$SMTP_PASSWORD" ]; then
+            echo "::warning::Secret SMTP_PASSWORD absent : mail-config.php n'est pas envoyé (le site marche, sans e-mails)."
+            exit 0
+          fi
+          fichier="$RUNNER_TEMP/mail-config.php"
+          python3 - "$fichier" <<'PY'
+          import os, sys
+          def php(v):
+              return "'" + v.replace("\\", "\\\\").replace("'", "\\'") + "'"
+          contenu = "\n".join([
+              "<?php",
+              "// Généré par le déploiement GitHub Actions. Ne pas modifier sur le serveur.",
+              "define('SMTP_HOST', 'mail.coreeauto.mg');",
+              "define('SMTP_PORT', 587);",
+              "define('SMTP_SECURE', 'tls');",
+              "define('SMTP_USER', 'contact@coreeauto.mg');",
+              "define('SMTP_PASS', " + php(os.environ["SMTP_PASSWORD"]) + ");",
+              "define('MAIL_FROM', 'contact@coreeauto.mg');",
+              "",
+          ])
+          open(sys.argv[1], "w", encoding="utf-8").write(contenu)
+          PY
+          curl -sS --fail --ssl-reqd --ftp-create-dirs -T "$fichier" \
+            --user "$FTP_USERNAME:$FTP_PASSWORD" \
+            "ftp://$FTP_SERVER/${FTP_DIR%/}/includes/mail-config.php"
+          rm -f "$fichier"
+          echo "mail-config.php envoyé."
 
       - name: Contrôle du site en ligne
         run: |
@@ -106,6 +147,7 @@ jobs:
           verifier /robots.txt              "200"
           verifier /index.php               "301"
           verifier /includes/db-config.php  "403 404"
+          verifier /includes/mail-config.php "403 404"
           verifier /.ftp-deploy-sync-state.json "403 404"
 
           # Redirections vers https://coreeauto.mg (sans www)

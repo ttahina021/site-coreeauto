@@ -21,6 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$erreurs) {
         db()->prepare('INSERT INTO rendez_vous (nom, telephone, vehicule, service, magasin, date_souhaitee, message) VALUES (?,?,?,?,?,?,?)')
             ->execute([$f['nom'], $f['telephone'], $f['vehicule'], $f['service'], $f['magasin'], $f['date_souhaitee'] ?: null, $f['message']]);
+        envoyer_mail(mail_boutique(), 'Rendez-vous atelier : ' . $f['service'] . ' - ' . $f['nom'],
+            "Nouvelle demande de rendez-vous atelier\n\nNom : {$f['nom']}\nTéléphone : {$f['telephone']}\nVéhicule : " . ($f['vehicule'] ?: '-')
+            . "\nService : {$f['service']}\nMagasin : {$f['magasin']}\nDate souhaitée : " . ($f['date_souhaitee'] ? date('d/m/Y', strtotime($f['date_souhaitee'])) : 'non précisée')
+            . ($f['message'] !== '' ? "\n\nMessage :\n{$f['message']}" : '') . "\n\nGérer les rendez-vous : " . url_absolue(url('admin/atelier.php')));
         redirect('atelier?envoye=1#rendez-vous');
     }
 }

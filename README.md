@@ -63,9 +63,12 @@ Secrets à créer une fois dans GitHub (Settings > Secrets and variables > Actio
 |---|---|
 | `FTP_USERNAME` | identifiant FTP de l’hébergement |
 | `FTP_PASSWORD` | mot de passe FTP |
+| `SMTP_PASSWORD` | mot de passe de la boîte contact@coreeauto.mg (envoi des e-mails du site) |
 
 Optionnel : la variable `FTP_SERVER_DIR` (onglet *Variables*) si le dossier web n’est pas `public_html/`
 pour ce compte FTP.
+
+Avec `SMTP_PASSWORD`, le déploiement écrit `includes/mail-config.php` sur le serveur (jamais dans le dépôt).
 
 Ne sont **jamais** dans le dépôt ni modifiés par le déploiement : `site/includes/db-config.php`
 (identifiants de la base), `site/data/` (SQLite locale), les photos de `site/uploads/`, `LISEZMOI.md`.

@@ -23,3 +23,4 @@ if (!defined('BASE_URL')) { // le routeur peut l'avoir déjà défini
 
 require __DIR__ . '/db.php';
 require __DIR__ . '/functions.php';
+require __DIR__ . '/mail.php';

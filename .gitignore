@@ -1,5 +1,6 @@
 # --- Secrets : jamais dans le dépôt ---
 site/includes/db-config.php
+site/includes/mail-config.php
 
 # --- Données locales et contenus du serveur ---
 site/data/*

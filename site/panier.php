@@ -67,6 +67,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $pdo->commit();
 
+            // E-mail à la boutique, et copie au client s'il a donné son adresse
+            $lignesTxt = '';
+            foreach ($detail['lignes'] as $l) {
+                $lignesTxt .= '- ' . $l['quantite'] . ' x ' . $l['piece']['nom'] . ' (réf. ' . $l['piece']['reference'] . ') : ' . prix($l['sous_total']) . "\n";
+            }
+            $recap = "Commande n° $commandeId\n\n" . $lignesTxt . "\nTotal : " . prix($detail['total']) . "\n\n"
+                . 'Nom : ' . $form['nom'] . "\nTéléphone : " . $form['telephone'] . "\nE-mail : " . ($form['email'] ?: '-')
+                . "\nMagasin de retrait : " . $form['magasin'] . ($form['message'] !== '' ? "\n\nMessage :\n" . $form['message'] : '');
+            envoyer_mail(mail_boutique(), 'Nouvelle commande n° ' . $commandeId . ' - ' . $form['nom'], $recap
+                . "\n\nGérer la commande : " . url_absolue(url('admin/commandes.php?id=' . $commandeId)), $form['email'] ?: null);
+            if ($form['email'] !== '') {
+                envoyer_mail($form['email'], 'Votre commande n° ' . $commandeId . ' chez ' . SITE_NAME,
+                    'Bonjour ' . $form['nom'] . ",\n\nMerci pour votre commande. Nous vous appelons rapidement pour confirmer la disponibilité et le retrait au magasin.\n\n"
+                    . $recap . "\n\nPas de paiement en ligne : vous réglez au retrait.\n\n" . SITE_NAME . "\n" . url_absolue(url('')), mail_boutique());
+            }
+
             $_SESSION['panier'] = [];
             $_SESSION['derniere_commande'] = $commandeId;
             redirect('panier?confirmation=' . $commandeId);

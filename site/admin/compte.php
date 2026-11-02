@@ -2,6 +2,14 @@
 require __DIR__ . '/../includes/bootstrap.php';
 exiger_admin();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'test_mail') {
+    csrf_check();
+    $ok = envoyer_mail(mail_boutique(), 'Test d’envoi - ' . SITE_NAME,
+        "Ceci est un e-mail de test envoyé depuis l’administration du site, le " . date('d/m/Y à H:i') . ".\n\nSi vous le lisez, les notifications de commandes et de rendez-vous fonctionnent.", null, $erreurMail);
+    flash($ok ? 'E-mail de test envoyé à ' . mail_boutique() . '.' : 'Échec de l’envoi : ' . $erreurMail, $ok ? 'succes' : 'erreur');
+    redirect('admin/compte.php');
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     $stmt = db()->prepare('SELECT * FROM admins WHERE id = ?');
@@ -36,6 +44,20 @@ require __DIR__ . '/_header.php';
         <label>Confirmer le nouveau mot de passe<input type="password" name="confirmation" required minlength="8" autocomplete="new-password"></label>
         <button class="btn btn-rouge">Enregistrer</button>
     </form>
+</section>
+
+<section class="panneau panneau-etroit">
+    <h2>E-mails du site</h2>
+    <?php if (mail_configure()): ?>
+        <p class="petit">Les commandes et les demandes de rendez-vous sont envoyées à <strong><?= e(mail_boutique()) ?></strong>, via <?= e(SMTP_HOST) ?>.</p>
+        <form method="post">
+            <?= csrf_field() ?>
+            <input type="hidden" name="action" value="test_mail">
+            <button class="btn btn-bleu">Envoyer un e-mail de test</button>
+        </form>
+    <?php else: ?>
+        <p class="petit">L’envoi d’e-mails n’est pas encore configuré sur ce serveur (fichier includes/mail-config.php absent).</p>
+    <?php endif; ?>
 </section>
 
 <?php require __DIR__ . '/_footer.php'; ?>
