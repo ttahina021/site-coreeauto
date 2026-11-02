@@ -17,7 +17,7 @@ permissions:
 
 env:
   FTP_SERVER: web2.simafri.cloud
-  SITE_URL: http://coreeauto.mg
+  SITE_URL: https://coreeauto.mg
 
 jobs:
   verifier:
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: http://coreeauto.mg
+      url: https://coreeauto.mg
     steps:
       - name: Secrets FTP présents ?
         env:
@@ -107,4 +107,20 @@ jobs:
           verifier /index.php               "301"
           verifier /includes/db-config.php  "403 404"
           verifier /.ftp-deploy-sync-state.json "403 404"
+
+          # Redirections vers https://coreeauto.mg (sans www)
+          redirige() {
+            res=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 20 "$1")
+            if [ "$res" = "301 $2" ]; then echo "OK   $1 -> $res"
+            else echo "::error::$1 a répondu « $res » (attendu : 301 $2)"; ok=0; fi
+          }
+          redirige http://coreeauto.mg/          https://coreeauto.mg/
+          redirige http://coreeauto.mg/catalogue https://coreeauto.mg/catalogue
+          redirige https://www.coreeauto.mg/     https://coreeauto.mg/
+
+          # Le sitemap ne doit contenir que des adresses https://coreeauto.mg
+          plan=$(curl -s --max-time 20 "$SITE_URL/sitemap.xml")
+          if echo "$plan" | grep -q '<loc>https://coreeauto.mg/' && ! echo "$plan" | grep -qE '<loc>http://|<loc>https://www\.'; then
+            echo "OK   sitemap.xml : $(echo "$plan" | grep -c '<loc>') adresses en https://coreeauto.mg"
+          else echo "::error::sitemap.xml contient des adresses qui ne sont pas en https://coreeauto.mg"; ok=0; fi
           [ $ok = 1 ]

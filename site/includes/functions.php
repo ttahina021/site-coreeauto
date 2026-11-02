@@ -294,9 +294,10 @@ function lien_catalogue(array $f = []): string
 /** Adresse complète (avec https://coreeauto.mg) pour les balises SEO et le sitemap. */
 function url_absolue(string $chemin): string
 {
-    $https = ($_SERVER['HTTPS'] ?? '') === 'on' || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
-    $hote = $_SERVER['HTTP_HOST'] ?? 'coreeauto.mg';
-    return ($https ? 'https' : 'http') . '://' . $hote . $chemin;
+    $hote = preg_replace('/^www\./i', '', $_SERVER['HTTP_HOST'] ?? 'coreeauto.mg');
+    // En ligne, le site est toujours servi en https (voir .htaccess) ; en local, on garde http.
+    $local = PHP_SAPI === 'cli-server' || preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/', $hote);
+    return ($local ? 'http' : 'https') . '://' . $hote . $chemin;
 }
 
 // ---------- Réglages du site (modifiables dans l'admin) ----------
