@@ -15,8 +15,6 @@ const WHATSAPP = '261335177778';
 const MAGASINS = [
     ['nom' => 'Ankasina 67ha', 'tel' => '033 51 777 78', 'adresse' => 'Rue Boulevard de l’Europe, 67 Ha, Antananarivo',
         'carte' => '-18.8968576,47.5112374'],
-    ['nom' => 'Anosizato Est', 'tel' => '033 60 777 77', 'adresse' => 'Anosizato Est, Antananarivo',
-        'carte' => '-18.933064,47.505547'],
     ['nom' => 'Tamatave (Bazar be)', 'tel' => '033 72 606 72', 'adresse' => 'Bazar be, Toamasina',
         'carte' => '-18.1571227,49.4103809'],
 ];

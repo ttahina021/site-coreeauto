@@ -84,7 +84,7 @@ $ldBase = [
 
 <div class="topbar">
     <div class="conteneur topbar-contenu">
-        <span>Livraison et retrait dans nos 3 magasins · Ouvert 6j/7</span>
+        <span>Livraison et retrait dans nos 2 magasins · Ouvert 6j/7</span>
         <span class="topbar-droite">
             <a href="tel:+261335177778">033 51 777 78</a>
             <a href="mailto:<?= e(SITE_EMAIL) ?>"><?= e(SITE_EMAIL) ?></a>

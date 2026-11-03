@@ -4,14 +4,14 @@ require_once __DIR__ . '/includes/bootstrap.php';
 $titre = 'Nos magasins à Antananarivo et Tamatave';
 $page = 'contact';
 $canonical = url('magasins');
-$description = 'Magasins Corée Auto : Ankasina 67ha (033 51 777 78), Anosizato Est (033 60 777 77) et Tamatave Bazar be (033 72 606 72). Ouvert du lundi au samedi.';
+$description = 'Magasins Corée Auto : Ankasina 67ha (033 51 777 78) et Tamatave Bazar be (033 72 606 72). Ouvert du lundi au samedi.';
 require __DIR__ . '/includes/header.php';
 ?>
 
 <section class="page-titre">
     <div class="conteneur">
         <h1>Nos magasins</h1>
-        <p>Retrait des commandes, conseil et garage dans nos 3 points de vente.</p>
+        <p>Retrait des commandes, conseil et garage dans nos 2 points de vente.</p>
     </div>
 </section>
 

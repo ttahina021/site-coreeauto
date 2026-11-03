@@ -17,7 +17,7 @@ require __DIR__ . '/includes/header.php';
         <div class="hero-texte">
             <p class="hero-sur-titre">Pièces d’origine coréenne</p>
             <h1>Votre référence en pièces <span>détachées coréennes</span></h1>
-            <p class="hero-intro">Hyundai, Kia, SsangYong, Daewoo… Freinage, transmission, suspension, moteur : trouvez la bonne pièce et retirez-la dans l’un de nos 3 magasins.</p>
+            <p class="hero-intro">Hyundai, Kia, SsangYong, Daewoo… Freinage, transmission, suspension, moteur : trouvez la bonne pièce et retirez-la dans l’un de nos 2 magasins.</p>
             <div class="hero-actions">
                 <a href="<?= url('catalogue') ?>" class="btn btn-blanc">Voir le catalogue</a>
                 <?php if (promotions_visibles()): ?>
