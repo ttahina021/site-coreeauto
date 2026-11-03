@@ -145,12 +145,17 @@ jobs:
           verifier /catalogue               "200"
           verifier /sitemap.xml             "200"
           verifier /robots.txt              "200"
+          verifier /panier                  "200"
           verifier /admin/login.php         "200"
           verifier /admin/                  "302"
           verifier /index.php               "301"
           verifier /includes/db-config.php  "403 404"
           verifier /includes/mail-config.php "403 404"
           verifier /.ftp-deploy-sync-state.json "403 404"
+
+          # Une fiche article prise dans le catalogue (s'il y en a une)
+          fiche=$(curl -s --max-time 20 "$SITE_URL/catalogue" | grep -oE 'href="(https://coreeauto\.mg)?/piece/[^"]+"' | head -1 | sed -E 's/^href="(https:\/\/coreeauto\.mg)?//; s/"$//')
+          if [ -n "$fiche" ]; then verifier "$fiche" "200"; else echo "(aucune fiche article dans le catalogue)"; fi
 
           # Redirections vers https://coreeauto.mg (sans www)
           redirige() {

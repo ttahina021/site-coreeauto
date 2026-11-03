@@ -17,38 +17,24 @@ $similaires = db()->prepare('SELECT * FROM pieces WHERE actif = 1 AND id != ? AN
 $similaires->execute([$p['id'], $p['categorie'], $p['marque'], $p['categorie']]);
 $similaires = $similaires->fetchAll();
 
-$messageWa = 'Bonjour Corée Auto, je suis intéressé(e) par : ' . $p['nom'] . ' (réf. ' . $p['reference'] . ')';
+$messageWa = 'Bonjour Corée Auto, je suis intéressé(e) par : ' . $p['nom'] . ' ' . $p['marque'] . ($p['modeles'] ? ' (' . $p['modeles'] . ')' : '');
 
-$titre = $p['nom'] . ' ' . $p['marque'] . ($p['modeles'] ? ' ' . $p['modeles'] : '') . ' - Réf. ' . $p['reference'];
+$titre = $p['nom'] . ' ' . $p['marque'] . ($p['modeles'] ? ' ' . $p['modeles'] : '');
 $page = 'catalogue';
 $canonical = lien_piece($p);
-$description = $p['nom'] . ' ' . $p['marque'] . ' (réf. ' . $p['reference'] . ')'
-    . ($p['modeles'] ? ', compatible ' . $p['modeles'] : '') . ' à ' . prix(prix_final($p))
+$description = $p['nom'] . ' ' . $p['marque']
+    . ($p['modeles'] ? ', compatible ' . $p['modeles'] : '')
     . '. ' . ($p['description'] ?: 'Pièce d’origine coréenne') . ' Disponible chez Corée Auto, Madagascar.';
 $ogImage = piece_image($p);
-$offre = [
-    '@type' => 'Offer',
-    'price' => prix_final($p),
-    'priceCurrency' => 'MGA',
-    'availability' => (int) $p['stock'] > 0 ? 'https://schema.org/InStock' : 'https://schema.org/BackOrder',
-    'url' => url_absolue(lien_piece($p)),
-    'seller' => ['@type' => 'Organization', 'name' => SITE_NAME],
-];
-if ($enPromo && $p['promo_fin']) {
-    $offre['priceValidUntil'] = $p['promo_fin'];
-}
 $jsonLd = [
     [
         '@context' => 'https://schema.org',
         '@type' => 'Product',
         'name' => $p['nom'],
-        'sku' => $p['reference'],
-        'mpn' => $p['reference'],
         'brand' => ['@type' => 'Brand', 'name' => $p['marque']],
         'category' => $p['categorie'],
         'description' => $p['description'] ?: $p['nom'],
         'image' => url_absolue(piece_image($p)),
-        'offers' => $offre,
     ],
     [
         '@context' => 'https://schema.org',
@@ -77,36 +63,23 @@ require __DIR__ . '/includes/header.php';
     <div class="fiche-infos">
         <div class="carte-meta"><?= e($p['marque']) ?> · <?= e($p['categorie']) ?></div>
         <h1><?= e($p['nom']) ?></h1>
-        <p class="fiche-ref">Référence : <strong><?= e($p['reference']) ?></strong></p>
         <?php if ($p['modeles']): ?>
             <p class="fiche-modeles">Compatible : <strong><?= e($p['modeles']) ?></strong></p>
         <?php endif; ?>
 
-        <div class="fiche-prix">
-            <?php if ($enPromo): ?>
-                <span class="prix-ancien"><?= prix((int) $p['prix']) ?></span>
-                <span class="prix prix-promo"><?= prix(prix_final($p)) ?></span>
-                <?php if ($p['promo_fin']): ?>
-                    <span class="promo-fin">Offre valable jusqu’au <?= e(date('d/m/Y', strtotime($p['promo_fin']))) ?></span>
-                <?php endif; ?>
-            <?php else: ?>
-                <span class="prix"><?= prix((int) $p['prix']) ?></span>
-            <?php endif; ?>
-        </div>
+        <?php if ($enPromo): ?>
+            <p class="fiche-promo"><span class="badge badge-promo">-<?= remise_pct($p) ?> %</span>
+                <?php if ($p['promo_fin']): ?><span class="promo-fin">Offre valable jusqu’au <?= e(date('d/m/Y', strtotime($p['promo_fin']))) ?></span><?php endif; ?>
+            </p>
+        <?php endif; ?>
 
-        <p class="stock <?= (int) $p['stock'] > 0 ? 'stock-ok' : 'stock-non' ?>">
-            <?= (int) $p['stock'] > 0 ? 'En stock' : 'Disponible sur commande' ?>
-        </p>
-
-        <?php if ((int) $p['stock'] > 0): ?>
             <form action="<?= url('panier') ?>" method="post" class="fiche-ajout">
                 <?= csrf_field() ?>
                 <input type="hidden" name="action" value="ajouter">
                 <input type="hidden" name="id" value="<?= (int) $p['id'] ?>">
-                <label>Quantité <input type="number" name="quantite" value="1" min="1" max="<?= min(99, (int) $p['stock']) ?>"></label>
+                <label>Quantité <input type="number" name="quantite" value="1" min="1" max="99"></label>
                 <button type="submit" class="btn btn-rouge">Ajouter au panier</button>
             </form>
-        <?php endif; ?>
         <a class="btn btn-whatsapp" href="https://wa.me/<?= e(WHATSAPP) ?>?text=<?= rawurlencode($messageWa) ?>" target="_blank" rel="noopener">Demander sur WhatsApp</a>
 
         <?php if ($p['description']): ?>

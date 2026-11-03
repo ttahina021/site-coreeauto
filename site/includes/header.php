@@ -99,7 +99,7 @@ $ldBase = [
         </a>
 
         <form class="recherche" action="<?= url('catalogue') ?>" method="get" role="search">
-            <input type="search" name="q" value="<?= e($q) ?>" placeholder="Rechercher une pièce, une référence, un modèle…" aria-label="Rechercher">
+            <input type="search" name="q" value="<?= e($q) ?>" placeholder="Rechercher une pièce, une marque, un modèle…" aria-label="Rechercher">
             <button type="submit" aria-label="Lancer la recherche">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
             </button>

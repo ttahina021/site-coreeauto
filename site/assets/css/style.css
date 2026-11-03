@@ -174,6 +174,9 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
 }
 .btn-ajout:hover { background: var(--rouge); transform: scale(1.08); }
 .rupture { font-size: 12px; color: var(--gris); font-weight: 600; }
+.carte-bas { align-items: center; }
+.carte-voir { font-size: 14px; font-weight: 600; color: var(--bleu); }
+.carte-voir:hover { color: var(--rouge); }
 
 /* ---------- Catégories ---------- */
 .grille-categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
@@ -220,6 +223,9 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
 .fiche-prix .prix { font-size: 32px; }
 .fiche-prix .prix-ancien { font-size: 18px; }
 .promo-fin { width: 100%; font-size: 13px; color: var(--rouge); font-weight: 600; }
+.fiche-promo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 16px 0 6px; }
+.fiche-promo .badge { position: static; }
+.fiche-promo .promo-fin { width: auto; }
 .stock { font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
 .stock::before { content: ''; width: 10px; height: 10px; border-radius: 50%; }
 .stock-ok { color: #17803d; } .stock-ok::before { background: #17803d; }

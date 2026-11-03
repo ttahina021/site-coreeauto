@@ -43,19 +43,16 @@ require __DIR__ . '/_header.php';
         <section class="panneau">
             <h2>Détail</h2>
             <table class="tableau">
-                <thead><tr><th>Pièce</th><th>Qté</th><th>Prix unitaire</th><th>Sous-total</th></tr></thead>
+                <thead><tr><th>Pièce</th><th>Qté</th></tr></thead>
                 <tbody>
                 <?php foreach ($lignes as $l): ?>
                     <tr>
-                        <td><?= e($l['nom']) ?><br><small><?= e($l['reference']) ?></small></td>
+                        <td><?php if ($l['piece_id']): ?><a href="<?= url('admin/piece.php?id=' . (int) $l['piece_id']) ?>"><?= e($l['nom']) ?></a><?php else: ?><?= e($l['nom']) ?><?php endif; ?></td>
                         <td><?= (int) $l['quantite'] ?></td>
-                        <td><?= prix((int) $l['prix_unitaire']) ?></td>
-                        <td><strong><?= prix($l['prix_unitaire'] * $l['quantite']) ?></strong></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <div class="total-ligne"><span>Total</span><strong><?= prix((int) $commande['total']) ?></strong></div>
         </section>
         <section class="panneau">
             <h2>Client</h2>
@@ -93,7 +90,7 @@ require __DIR__ . '/_header.php';
         <?php else: ?>
             <div class="tableau-defilant">
             <table class="tableau tableau-admin">
-                <thead><tr><th>N°</th><th>Date</th><th>Client</th><th>Magasin</th><th>Total</th><th>Statut</th></tr></thead>
+                <thead><tr><th>N°</th><th>Date</th><th>Client</th><th>Magasin</th><th>Statut</th></tr></thead>
                 <tbody>
                 <?php foreach ($commandes as $c): ?>
                     <tr>
@@ -101,7 +98,6 @@ require __DIR__ . '/_header.php';
                         <td><?= e(date('d/m/Y H:i', strtotime($c['created_at']))) ?></td>
                         <td><?= e($c['nom']) ?><br><small><?= e($c['telephone']) ?></small></td>
                         <td><?= e($c['magasin']) ?></td>
-                        <td><?= prix((int) $c['total']) ?></td>
                         <td><span class="statut statut-<?= e($c['statut']) ?>"><?= e(STATUTS_COMMANDE[$c['statut']] ?? $c['statut']) ?></span></td>
                     </tr>
                 <?php endforeach; ?>

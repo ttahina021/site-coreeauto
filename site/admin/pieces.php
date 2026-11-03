@@ -23,7 +23,7 @@ $categorie = $_GET['categorie'] ?? '';
 $where = ['1'];
 $params = [];
 if ($q !== '') {
-    $where[] = '(nom LIKE :q OR reference LIKE :q OR modeles LIKE :q)';
+    $where[] = '(nom LIKE :q OR modeles LIKE :q)';
     $params[':q'] = "%$q%";
 }
 if ($marque !== '') {
@@ -62,28 +62,19 @@ require __DIR__ . '/_header.php';
     <div class="tableau-defilant">
     <table class="tableau tableau-admin">
         <thead>
-            <tr><th></th><th>Pièce</th><th>Marque / catégorie</th><th>Prix</th><th>Stock</th><th>Statut</th><th></th></tr>
+            <tr><th></th><th>Pièce</th><th>Marque / catégorie</th><th>Statut</th><th></th></tr>
         </thead>
         <tbody>
         <?php foreach ($pieces as $p): ?>
             <tr class="<?= $p['actif'] ? '' : 'inactif' ?>">
                 <td><img src="<?= e(piece_image($p)) ?>" alt="" class="miniature"></td>
                 <td>
-                    <a href="<?= url('admin/piece.php?id=' . $p['id']) ?>"><strong><?= e($p['nom']) ?></strong></a><br>
-                    <small><?= e($p['reference']) ?></small>
+                    <a href="<?= url('admin/piece.php?id=' . $p['id']) ?>"><strong><?= e($p['nom']) ?></strong></a>
+                    <?php if ($p['modeles']): ?><br><small><?= e($p['modeles']) ?></small><?php endif; ?>
                 </td>
                 <td><?= e($p['marque']) ?><br><small><?= e($p['categorie']) ?></small></td>
                 <td>
-                    <?php if (promo_active($p)): ?>
-                        <span class="prix-ancien"><?= prix((int) $p['prix']) ?></span><br>
-                        <strong class="texte-rouge"><?= prix(prix_final($p)) ?></strong>
-                        <span class="etiquette etiquette-rouge">-<?= remise_pct($p) ?> %</span>
-                    <?php else: ?>
-                        <?= prix((int) $p['prix']) ?>
-                    <?php endif; ?>
-                </td>
-                <td><strong class="<?= $p['stock'] <= 0 ? 'texte-rouge' : '' ?>"><?= (int) $p['stock'] ?></strong></td>
-                <td>
+                    <?= promo_active($p) ? '<span class="etiquette etiquette-rouge">-' . remise_pct($p) . ' %</span>' : '' ?>
                     <?= $p['actif'] ? '<span class="etiquette etiquette-vert">En ligne</span>' : '<span class="etiquette">Masquée</span>' ?>
                     <?= $p['nouveau'] ? '<span class="etiquette etiquette-bleu">Arrivage</span>' : '' ?>
                 </td>

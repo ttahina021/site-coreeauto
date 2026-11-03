@@ -5,7 +5,7 @@
 function promo_active_sql(): string
 {
     $auj = "'" . date('Y-m-d') . "'";
-    return "(promo_type IS NOT NULL AND promo_valeur > 0
+    return "(promo_type = 'pourcent' AND promo_valeur > 0
         AND (promo_debut IS NULL OR promo_debut <= $auj)
         AND (promo_fin IS NULL OR promo_fin >= $auj))";
 }
@@ -51,7 +51,8 @@ function promo_active(array $p): bool
     if (!empty($p['promo_fin']) && $p['promo_fin'] < $today) {
         return false;
     }
-    return prix_final($p, true) < (int) $p['prix'];
+    // Sans prix affichés, seule la remise en pourcentage reste (badge « -X % »)
+    return $p['promo_type'] === 'pourcent' && (int) $p['promo_valeur'] <= 90;
 }
 
 function prix_final(array $p, bool $ignoreDates = false): int
@@ -72,11 +73,7 @@ function prix_final(array $p, bool $ignoreDates = false): int
 
 function remise_pct(array $p): int
 {
-    $prix = (int) $p['prix'];
-    if ($prix <= 0) {
-        return 0;
-    }
-    return (int) round(100 - prix_final($p) * 100 / $prix);
+    return $p['promo_type'] === 'pourcent' ? (int) $p['promo_valeur'] : 0;
 }
 
 // ---------- Pièces ----------

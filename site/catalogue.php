@@ -11,7 +11,7 @@ $tri = $_GET['tri'] ?? 'recent';
 $where = ['actif = 1'];
 $params = [];
 if ($q !== '') {
-    $where[] = '(nom LIKE :q OR reference LIKE :q OR modeles LIKE :q OR description LIKE :q OR marque LIKE :q)';
+    $where[] = '(nom LIKE :q OR modeles LIKE :q OR description LIKE :q OR marque LIKE :q)';
     $params[':q'] = '%' . $q . '%';
 }
 if (in_array($marque, MARQUES, true)) {
@@ -30,8 +30,6 @@ if ($nouveau) {
 }
 $ordres = [
     'recent' => 'created_at DESC, id DESC',
-    'prix_asc' => 'prix ASC',
-    'prix_desc' => 'prix DESC',
     'nom' => 'LOWER(nom) ASC',
 ];
 $order = $ordres[$tri] ?? $ordres['recent'];
@@ -63,7 +61,7 @@ if ($promo && !$marque && !$categorie) {
 $page = $promo ? 'promos' : 'catalogue';
 $filtres = ['marque' => $marque, 'categorie' => $categorie, 'promo' => $promo ? '1' : '', 'nouveau' => $nouveau ? '1' : ''];
 $canonical = lien_catalogue($filtres);
-$description = $titre . ' chez Corée Auto : ' . count($pieces) . ' pièce(s) d’origine coréenne disponibles, prix en Ariary, retrait dans nos magasins d’Antananarivo et Tamatave.';
+$description = $titre . ' chez Corée Auto : ' . count($pieces) . ' pièce(s) d’origine coréenne disponibles, retrait dans nos magasins d’Antananarivo et Tamatave.';
 if ($q !== '' || $tri !== 'recent') {
     $robots = 'noindex, follow'; // résultats de recherche et tris : pas d'indexation
 }
@@ -104,8 +102,6 @@ require __DIR__ . '/includes/header.php';
             <h3>Trier par</h3>
             <select name="tri">
                 <option value="recent" <?= $tri === 'recent' ? 'selected' : '' ?>>Plus récentes</option>
-                <option value="prix_asc" <?= $tri === 'prix_asc' ? 'selected' : '' ?>>Prix croissant</option>
-                <option value="prix_desc" <?= $tri === 'prix_desc' ? 'selected' : '' ?>>Prix décroissant</option>
                 <option value="nom" <?= $tri === 'nom' ? 'selected' : '' ?>>Nom (A-Z)</option>
             </select>
 

@@ -89,7 +89,7 @@ require __DIR__ . '/_header.php';
 
 <section class="panneau panneau-promo">
     <h2>Appliquer une promotion à plusieurs pièces</h2>
-    <p class="petit">Pour une promotion sur une seule pièce (pourcentage ou prix fixe), modifiez directement la pièce.</p>
+    <p class="petit">Pour une promotion sur une seule pièce, modifiez directement la pièce. Sur le site, la remise s’affiche en badge « -X % » (les prix ne sont pas affichés).</p>
     <form method="post" class="formulaire promo-groupee">
         <?= csrf_field() ?>
         <input type="hidden" name="action" value="appliquer">
@@ -124,18 +124,14 @@ require __DIR__ . '/_header.php';
             <div class="tableau-defilant">
             <table class="tableau tableau-admin">
                 <thead>
-                    <tr><th><input type="checkbox" id="tout-cocher" aria-label="Tout cocher"></th><th>Pièce</th><th>Prix normal</th><th>Prix promo</th><th>Période</th><th>Statut</th><th></th></tr>
+                    <tr><th><input type="checkbox" id="tout-cocher" aria-label="Tout cocher"></th><th>Pièce</th><th>Remise</th><th>Période</th><th>Statut</th><th></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($promos as $p): [$statut, $classe] = statut_promo($p, $today); ?>
                     <tr>
                         <td><input type="checkbox" name="ids[]" value="<?= $p['id'] ?>"></td>
-                        <td><strong><?= e($p['nom']) ?></strong><br><small><?= e($p['marque']) ?> · <?= e($p['reference']) ?></small></td>
-                        <td><?= prix((int) $p['prix']) ?></td>
-                        <td>
-                            <strong class="texte-rouge"><?= prix(prix_final($p, true)) ?></strong>
-                            <span class="etiquette etiquette-rouge"><?= $p['promo_type'] === 'pourcent' ? '-' . (int) $p['promo_valeur'] . ' %' : 'Prix fixe' ?></span>
-                        </td>
+                        <td><strong><?= e($p['nom']) ?></strong><br><small><?= e($p['marque']) ?> · <?= e($p['categorie']) ?></small></td>
+                        <td><span class="etiquette etiquette-rouge"><?= $p['promo_type'] === 'pourcent' ? '-' . (int) $p['promo_valeur'] . ' %' : 'Prix fixe (inactif)' ?></span></td>
                         <td>
                             <?= $p['promo_debut'] ? date('d/m/Y', strtotime($p['promo_debut'])) : '…' ?>
                             → <?= $p['promo_fin'] ? date('d/m/Y', strtotime($p['promo_fin'])) : 'sans limite' ?>
